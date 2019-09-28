@@ -9,7 +9,7 @@ module.exports = (sequelize, DataType) => {
             type: DataType.STRING,
             allowNull: false,
             validate: {
-                notEmpty: true
+                notNull: { args: true, msg: "You must enter a titles" }
             }
         },
         done: {

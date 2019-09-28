@@ -1,10 +1,16 @@
 module.exports = app => {
-    const Users = app.db.Users;
+    const Users = app.db.models.Users;
+
+    app.get("/users", (req, res) => {
+        Users.findAll({})
+            .then(result => res.json(result))
+            .catch(error => {
+                res.status(412).json({msg: error.message});
+            });
+    });
 
     app.get("/users/:id", (req, res) => {
-        Users.findById(req.params.id, {
-                attributes: ["id", "name", "email"]
-            })
+        Users.findOne({where: req.params})
             .then(result => res.json(result))
             .catch(error => {
                 res.status(412).json({
@@ -29,7 +35,7 @@ module.exports = app => {
 
     app.post("/users", (req, res) => {
         Users.create(req.body)
-            .then(result => json(result))
+            .then(result => res.json(result))
             .catch(error => { //CRUDify API resources 45
                 res.status(412).json({
                     msg: error.message
